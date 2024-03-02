@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/xe
+    username: system
+    password: system
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  main:
+    allow-bean-definition-overriding: true
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.Oracle12cDialect
+
+  batch:
+    job:
+      enabled: false
+      names: firstJob
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+            DataSourceTransactionManager: DEBUG
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
