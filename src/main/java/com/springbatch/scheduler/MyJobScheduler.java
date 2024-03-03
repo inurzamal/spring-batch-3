@@ -1,4 +1,6 @@
 package com.springbatch.scheduler;
+import com.springbatch.entity.Employee;
+import com.springbatch.repository.EmployeeRepository;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 @Component
 public class MyJobScheduler {
 
@@ -20,6 +24,9 @@ public class MyJobScheduler {
 
     @Autowired
     private Job job;
+
+//    @Autowired
+//    EmployeeRepository employeeRepository;
 
     @Scheduled(cron = "0 0/1 * 1/1 * ?") // Cron expression for every 1 minute
     public void runJob() {
