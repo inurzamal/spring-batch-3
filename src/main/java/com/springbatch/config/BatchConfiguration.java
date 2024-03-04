@@ -18,13 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
-
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
 @EnableBatchProcessing
+@EnableTransactionManagement
 public class BatchConfiguration {
 
 	private static final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
@@ -39,9 +41,6 @@ public class BatchConfiguration {
 	MyTasklet myTasklet;
 	@Autowired
 	EmailTasklet emailTasklet;
-//	@Autowired
-//	PlatformTransactionManager transactionManager;
-
 
 
 	@Bean
@@ -59,35 +58,26 @@ public class BatchConfiguration {
 	}
 
 	@Bean(name = "jobRepository")
-	public JobRepository getJobRepository() throws Exception {
+	public JobRepository getJobRepository(PlatformTransactionManager transactionManager) throws Exception {
 		JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
-		factory.setDataSource(dataSource);
-		factory.setTransactionManager(transactionManager(dataSource));
+		factory.setDataSource(dataSource);  // Use the common DataSource
+		factory.setTransactionManager(transactionManager);  // Use the common TransactionManager
 		factory.setTablePrefix("PCCS_BATCH_");
 		factory.setIsolationLevelForCreate("ISOLATION_DEFAULT");
 		factory.afterPropertiesSet();
 		return factory.getObject();
 	}
 
-//	@Bean(name = "jobRepository")
-//	public JobRepository getJobRepository() throws Exception {
-//		JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
-//		factory.setDataSource(dataSource);
-//		factory.setTransactionManager(transactionManager);
-//		factory.setTablePrefix("PCCS_BATCH_");
-//		factory.setIsolationLevelForCreate("ISOLATION_DEFAULT");
-//		factory.afterPropertiesSet();
-//		return factory.getObject();
-//	}
-
 	@Bean
 	public JobBuilderFactory jobBuilderFactory(JobRepository jobRepository) {
 		return new JobBuilderFactory(jobRepository);
 	}
 
-	@Bean
-	public PlatformTransactionManager transactionManager(DataSource dataSource) {
-		return new DataSourceTransactionManager(dataSource);
+	@Bean(name = "transactionManager")
+	public PlatformTransactionManager jpaTransactionManager(EntityManagerFactory entityManagerFactory) {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(entityManagerFactory);
+		return transactionManager;
 	}
 
 	@Bean

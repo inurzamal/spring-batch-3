@@ -2,53 +2,43 @@ package com.springbatch.service;
 
 import com.springbatch.entity.Employee;
 import com.springbatch.repository.EmployeeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class MyTasklet implements Tasklet {
 
+    public static final Logger log = LoggerFactory.getLogger(MyTasklet.class);
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private EmployeeRepository employeeRepository;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        Long id = generateId(); // Generate an ID (you may use your preferred method for this)
-        String name = "John"; // Replace with your actual name
-        String city = "New York"; // Replace with your actual city
 
-//        jdbcTemplate.update("INSERT INTO EMPLOYEE_DETAILS (id, name, city) VALUES (?, ?, ?)", id, name, city);
+//        Employee newEmployee = new Employee();
+//        newEmployee.setName("Rahul");
+//        newEmployee.setCity("Guwahati");
+//        employeeRepository.save(newEmployee);
 
-        List<Employee> employees = jdbcTemplate.query("SELECT * FROM EMPLOYEE_DETAILS",
-                (rs, rowNum) -> {
-                    Employee employee = new Employee();
-                    employee.setId(rs.getLong("id"));
-                    employee.setName(rs.getString("name"));
-                    employee.setCity(rs.getString("city"));
-                    return employee;
-                });
+        /**
+         *
+         * employeeRepository.deleteEmployeesByCityNewYork(); //Purge Job
+         *
+         * */
 
-        System.out.println("Fetched Employees:");
-        employees.forEach(System.out::println);
+        List<Employee> employees = employeeRepository.findAll();
+        employees.forEach(employee -> log.info("Employee: {}", employee));
 
         return RepeatStatus.FINISHED;
     }
 
-    private Long generateId() {
-        // Implement your logic to generate a unique ID, e.g., using UUID.randomUUID().getMostSignificantBits()
-        return UUID.randomUUID().getMostSignificantBits();
-    }
 }
