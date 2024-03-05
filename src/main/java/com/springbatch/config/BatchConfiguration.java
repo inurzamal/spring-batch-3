@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -98,7 +99,8 @@ public class BatchConfiguration {
 	public JobLauncher jobLauncher(JobRepository jobRepository) throws Exception {
 		SimpleJobLauncher launcher = new SimpleJobLauncher();
 		launcher.setJobRepository(jobRepository);
-		launcher.setTaskExecutor(new SimpleAsyncTaskExecutor());
+//		launcher.setTaskExecutor(new SimpleAsyncTaskExecutor());
+		launcher.setTaskExecutor(new SyncTaskExecutor());
 		launcher.afterPropertiesSet();
 		return launcher;
 	}
