@@ -33,15 +33,15 @@ public class BatchConfiguration {
 	private static final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
 
 	@Autowired
-	JobBuilderFactory jobBuilderFactory;
+	private JobBuilderFactory jobBuilderFactory;
 	@Autowired
-	StepBuilderFactory stepBuilderFactory;
+	private StepBuilderFactory stepBuilderFactory;
 	@Autowired
-	DataSource dataSource;
+	private DataSource dataSource;
 	@Autowired
-	MyTasklet myTasklet;
+	private MyTasklet myTasklet;
 	@Autowired
-	EmailTasklet emailTasklet;
+	private EmailTasklet emailTasklet;
 
 
 	@Bean
@@ -53,7 +53,7 @@ public class BatchConfiguration {
 
 	@Bean
 	public Step emailTaskletStep(StepBuilderFactory stepBuilderFactory, EmailTasklet emailTasklet) {
-		return stepBuilderFactory.get("emailTasklet")
+		return stepBuilderFactory.get("emailTaskletStep")
 				.tasklet(emailTasklet)
 				.build();
 	}
@@ -63,7 +63,7 @@ public class BatchConfiguration {
 		JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
 		factory.setDataSource(dataSource);  // Use the common DataSource
 		factory.setTransactionManager(transactionManager);  // Use the common TransactionManager
-		factory.setTablePrefix("PCCS_BATCH_");
+		factory.setTablePrefix("MCCS_BATCH_");
 		factory.setIsolationLevelForCreate("ISOLATION_DEFAULT");
 		factory.afterPropertiesSet();
 		return factory.getObject();
@@ -86,7 +86,7 @@ public class BatchConfiguration {
 		return new StepBuilderFactory(jobRepository,transactionManager);
 	}
 
-	@Bean
+	@Bean(name = "firstJob")
 	public Job firstJob(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, MyTasklet myTasklet, EmailTasklet emailTasklet) {
 		return jobBuilderFactory.get("firstJob")
 				.incrementer(new RunIdIncrementer())
@@ -99,8 +99,8 @@ public class BatchConfiguration {
 	public JobLauncher jobLauncher(JobRepository jobRepository) throws Exception {
 		SimpleJobLauncher launcher = new SimpleJobLauncher();
 		launcher.setJobRepository(jobRepository);
-//		launcher.setTaskExecutor(new SimpleAsyncTaskExecutor());
-		launcher.setTaskExecutor(new SyncTaskExecutor());
+		launcher.setTaskExecutor(new SimpleAsyncTaskExecutor());
+//		launcher.setTaskExecutor(new SyncTaskExecutor());
 		launcher.afterPropertiesSet();
 		return launcher;
 	}

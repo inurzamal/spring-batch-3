@@ -24,6 +24,7 @@ public class DataSourceConfig {
         config.setJdbcUrl(jdbcUrl);
         config.setUsername(username);
         config.setPassword(password);
+//        config.setSchema(schemaName);
 
         return new HikariDataSource(config);
     }

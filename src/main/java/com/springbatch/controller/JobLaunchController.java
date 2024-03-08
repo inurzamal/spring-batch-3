@@ -6,6 +6,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,19 +25,27 @@ public class JobLaunchController {
 	private JobLauncher jobLauncher;
 
 	@Autowired
-	private Job job;
+	@Qualifier("firstJob")
+	private Job firstJob;
 
-	@GetMapping("/launchJob/{id}")
-	public ResponseEntity<String> launchJob(@PathVariable("id") String id) {
-		try {
-			JobParameters jobParameters = new JobParametersBuilder().addString("param", id).toJobParameters();
-			jobLauncher.run(job, jobParameters);
-			log.info("Job launched successfully with parameters: {}", jobParameters);
-			return ResponseEntity.ok("Job launched successfully");
-		} catch (JobExecutionException e) {
-			log.error("Error launching job: {}", e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error launching job: " + e.getMessage());
+	@GetMapping("/launchJob/{jobName}")
+	public ResponseEntity<String> launchJob(@PathVariable("jobName") String jobName) {
+
+		JobParameters jobParameters = new JobParametersBuilder()
+				.addLong("startAt", System.currentTimeMillis()).toJobParameters();
+
+		if (jobName.equalsIgnoreCase("firstJob")) {
+			try {
+				log.info("Before Job run..");
+				jobLauncher.run(firstJob, jobParameters);
+				log.info("Job launched successfully with parameters: {}", jobParameters);
+				return ResponseEntity.ok("Job launched successfully");
+			} catch (JobExecutionException e) {
+				log.error("Error launching job: {}", e.getMessage(), e);
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error launching job: " + e.getMessage());
+			}
 		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please provide correct jobName");
 	}
 }
 
