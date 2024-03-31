@@ -4,6 +4,10 @@ spring:
     username: system
     password: system
     driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      initialization-mode: always
+      minimum-idle: 0
+      maximum-pool-size: 5
 
   main:
     allow-bean-definition-overriding: true

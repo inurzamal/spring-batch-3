@@ -1,5 +1,6 @@
-package com.springbatch.service;
+package com.springbatch.batch.finalanalysisjob;
 
+import com.springbatch.entity.Employee;
 import com.springbatch.repository.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +11,12 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class MyTasklet implements Tasklet {
+import java.util.List;
 
-    public static final Logger log = LoggerFactory.getLogger(MyTasklet.class);
+@Service
+public class FinalAnalysisJobTasklet implements Tasklet {
+
+    public static final Logger log = LoggerFactory.getLogger(FinalAnalysisJobTasklet.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -21,16 +24,14 @@ public class MyTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 
-//        Employee newEmployee = new Employee();
-//        newEmployee.setName("Rahul");
-//        newEmployee.setCity("Guwahati");
-//        employeeRepository.save(newEmployee);
-//        List<Employee> employees = employeeRepository.findAll();
-//        employees.forEach(employee -> log.info("Employee: {}", employee));
+        Employee newEmployee = new Employee();
+        newEmployee.setName("Rahul");
+        newEmployee.setCity("Guwahati");
+        employeeRepository.save(newEmployee);
 
-        employeeRepository.deleteEmployeesByCityNewYork(); //Purge Job
+        List<Employee> employees = employeeRepository.findAll();
+        employees.forEach(employee -> log.info("Employee: {}", employee));
 
         return RepeatStatus.FINISHED;
     }
-
 }

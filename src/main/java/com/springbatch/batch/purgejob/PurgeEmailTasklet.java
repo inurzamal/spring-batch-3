@@ -1,4 +1,4 @@
-package com.springbatch.service;
+package com.springbatch.batch.purgejob;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailTasklet implements Tasklet {
+public class PurgeEmailTasklet implements Tasklet {
 
-    public static final Logger log = LoggerFactory.getLogger(EmailTasklet.class);
+    public static final Logger log = LoggerFactory.getLogger(PurgeEmailTasklet.class);
 
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
@@ -20,6 +20,6 @@ public class EmailTasklet implements Tasklet {
     }
 
     private void sendMail() {
-        log.info("sending mail..TODO..");
+        log.info("sending mail..TODO..purgeJob");
     }
 }
