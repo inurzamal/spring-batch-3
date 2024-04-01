@@ -1,13 +1,13 @@
 package com.springbatch.batch;
-
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionException;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 
 @Component
 public class JobRunner implements CommandLineRunner {
@@ -24,18 +24,33 @@ public class JobRunner implements CommandLineRunner {
     private Job purgeJob;
 
     @Override
-    public void run(String... args) throws Exception {
-        // Launch finalAnalysisJob
-        JobParameters jobParameters1 = new JobParametersBuilder()
+    public void run(String... args) {
+        // Define job parameters for finalAnalysisJob
+        JobParameters finalAnalysisJobParameters = new JobParametersBuilder()
                 .addLong("startAt", System.currentTimeMillis())
                 .toJobParameters();
-        jobLauncher.run(finalAnalysisJob, jobParameters1);
 
-        // Launch purgeJob
-        JobParameters jobParameters2 = new JobParametersBuilder()
+        try {
+            // Launch finalAnalysisJob
+            jobLauncher.run(finalAnalysisJob, finalAnalysisJobParameters);
+            System.out.println("finalAnalysisJob launched successfully.");
+        } catch (JobExecutionException e) {
+            System.err.println("Error launching finalAnalysisJob: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Define job parameters for purgeJob
+        JobParameters purgeJobParameters = new JobParametersBuilder()
                 .addLong("startAt", System.currentTimeMillis())
                 .toJobParameters();
-        jobLauncher.run(purgeJob, jobParameters2);
+
+        try {
+            // Launch purgeJob
+            jobLauncher.run(purgeJob, purgeJobParameters);
+            System.out.println("purgeJob launched successfully.");
+        } catch (JobExecutionException e) {
+            System.err.println("Error launching purgeJob: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
-
