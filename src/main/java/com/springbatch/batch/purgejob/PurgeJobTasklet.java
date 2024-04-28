@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PurgeJobTasklet implements Tasklet {
 
-    public static final Logger log = LoggerFactory.getLogger(PurgeJobTasklet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PurgeJobTasklet.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;

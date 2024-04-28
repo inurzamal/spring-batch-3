@@ -20,6 +20,7 @@ spring:
 
   batch:
     job:
+      names: purgeEscrowAnalysisJob
       enabled: false
 
 logging:

@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class FinalAnalysisJobTasklet implements Tasklet {
 
-    public static final Logger log = LoggerFactory.getLogger(FinalAnalysisJobTasklet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FinalAnalysisJobTasklet.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -30,7 +30,7 @@ public class FinalAnalysisJobTasklet implements Tasklet {
         employeeRepository.save(newEmployee);
 
         List<Employee> employees = employeeRepository.findAll();
-        employees.forEach(employee -> log.info("Employee: {}", employee));
+        employees.forEach(employee -> LOGGER.info("Employee: {}", employee));
 
         return RepeatStatus.FINISHED;
     }

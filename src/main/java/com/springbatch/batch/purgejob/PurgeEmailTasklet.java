@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PurgeEmailTasklet implements Tasklet {
 
-    public static final Logger log = LoggerFactory.getLogger(PurgeEmailTasklet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PurgeEmailTasklet.class);
 
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
@@ -20,6 +20,6 @@ public class PurgeEmailTasklet implements Tasklet {
     }
 
     private void sendMail() {
-        log.info("sending mail..TODO..purgeJob");
+        LOGGER.info("sending mail..TODO..purgeJob");
     }
 }
