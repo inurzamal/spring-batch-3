@@ -13,9 +13,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class AppLauncher implements CommandLineRunner {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DemoApplication.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppLauncher.class);
 
 	@Value("${spring.batch.job.names:none}")
 	private String jobName;
@@ -28,14 +28,14 @@ public class DemoApplication implements CommandLineRunner {
 	@Qualifier("purgeJob")
 	private Job purgeEscrowAnalysisJob;
 
-	public DemoApplication(JobLauncher jobLauncher, Job finalAnalysisJob, Job purgeJob) {
+	public AppLauncher(JobLauncher jobLauncher, Job finalAnalysisJob, Job purgeJob) {
 		this.jobLauncher = jobLauncher;
 		this.individualFinalAnalysisJob = finalAnalysisJob;
 		this.purgeEscrowAnalysisJob = purgeJob;
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(AppLauncher.class, args);
 	}
 
 	@Override
