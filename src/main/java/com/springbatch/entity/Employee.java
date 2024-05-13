@@ -1,48 +1,65 @@
 package com.springbatch.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "EMPLOYEE_DETAILS")
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private String city;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "emp_id")
+    private Long empId;
 
+    @Column(name = "emp_name")
+    private String empName;
 
-    public Long getId() {
-        return id;
+    @Column(name = "emp_city")
+    private String empCity;
+
+    @Column(name = "degree")
+    private String degree;
+
+    @Column(name = "specialization")
+    private String specialization;
+
+    public Long getEmpId() {
+        return empId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEmpId(Long empId) {
+        this.empId = empId;
     }
 
-    public String getName() {
-        return name;
+    public String getEmpName() {
+        return empName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmpName(String empName) {
+        this.empName = empName;
     }
 
-    public String getCity() {
-        return city;
+    public String getEmpCity() {
+        return empCity;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setEmpCity(String empCity) {
+        this.empCity = empCity;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", city='" + city + '\'' +
-                '}';
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 }

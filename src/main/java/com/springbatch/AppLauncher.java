@@ -6,6 +6,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -20,19 +21,20 @@ public class AppLauncher implements CommandLineRunner {
 	@Value("${spring.batch.job.names:none}")
 	private String jobName;
 
-	private final JobLauncher jobLauncher;
+	@Autowired
+	private JobLauncher jobLauncher;
 
+	@Autowired
 	@Qualifier("finalAnalysisJob")
 	private Job individualFinalAnalysisJob;
 
+	@Autowired
 	@Qualifier("purgeJob")
 	private Job purgeEscrowAnalysisJob;
 
-	public AppLauncher(JobLauncher jobLauncher, Job finalAnalysisJob, Job purgeJob) {
-		this.jobLauncher = jobLauncher;
-		this.individualFinalAnalysisJob = finalAnalysisJob;
-		this.purgeEscrowAnalysisJob = purgeJob;
-	}
+	@Autowired
+	@Qualifier("studentEmployeeJob")
+	private Job studentEmployeeJob;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AppLauncher.class, args);
@@ -46,6 +48,8 @@ public class AppLauncher implements CommandLineRunner {
 			jobToRun = individualFinalAnalysisJob;
 		} else if ("purgeEscrowAnalysisJob".equalsIgnoreCase(jobName)) {
 			jobToRun = purgeEscrowAnalysisJob;
+		} else if ("studentEmployeeJob".equalsIgnoreCase(jobName)) {
+			jobToRun = studentEmployeeJob;
 		} else {
 			throw new IllegalArgumentException("Invalid job specified: " + jobName);
 		}
