@@ -28,7 +28,7 @@ public class FinalAnalysisJobConfig {
     }
 
     @Bean(name = "finalAnalysisJob")
-    public Job finalAnalysisJob(JobRepository jobRepository,FinalAnalysisJobTasklet finalAnalysisJobTasklet, FinalAnalysisEmailTasklet finalAnalysisEmailTasklet, PlatformTransactionManager transactionManager) throws Exception {
+    public Job finalAnalysisJob(JobRepository jobRepository,FinalAnalysisJobTasklet finalAnalysisJobTasklet, FinalAnalysisEmailTasklet finalAnalysisEmailTasklet, PlatformTransactionManager transactionManager) {
         return new JobBuilder("finalAnalysisJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(finalAnalysisTaskletStep(finalAnalysisJobTasklet, jobRepository, transactionManager))

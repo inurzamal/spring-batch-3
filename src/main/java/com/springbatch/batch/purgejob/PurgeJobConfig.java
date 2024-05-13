@@ -13,7 +13,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 public class PurgeJobConfig {
 
-
     private Step purgeJobStep(PurgeJobTasklet purgeJobTasklet, JobRepository jobRepository, PlatformTransactionManager jpaTransactionManager) {
         return new StepBuilder("purgeJobStep", jobRepository)
                 .tasklet(purgeJobTasklet, jpaTransactionManager)

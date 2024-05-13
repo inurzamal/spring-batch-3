@@ -14,7 +14,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
@@ -25,13 +24,17 @@ import java.util.Collections;
 @Configuration
 public class StudentEmployeeJobConfiguration {
 
-    @Autowired
-    StudentRepository studentRepository;
-    @Autowired
-    EmployeeRepository employeeRepository;
+    private final StudentRepository studentRepository;
 
-    @Autowired
-    public ItemProcessor<Student, Employee> studentToEmployeeProcessor;
+    private final EmployeeRepository employeeRepository;
+
+    private final ItemProcessor<Student, Employee> studentToEmployeeProcessor;
+
+    public StudentEmployeeJobConfiguration(StudentRepository studentRepository, EmployeeRepository employeeRepository, ItemProcessor<Student, Employee> studentToEmployeeProcessor) {
+        this.studentRepository = studentRepository;
+        this.employeeRepository = employeeRepository;
+        this.studentToEmployeeProcessor = studentToEmployeeProcessor;
+    }
 
     @Bean
     public ItemReader<Student> studentItemReader() throws Exception {
@@ -46,7 +49,7 @@ public class StudentEmployeeJobConfiguration {
 
     @Bean
     public ItemWriter<Employee> employeeJpaItemWriter() {
-        return items -> employeeRepository.saveAll(items);
+        return employeeRepository::saveAll;
     }
 
     @Bean

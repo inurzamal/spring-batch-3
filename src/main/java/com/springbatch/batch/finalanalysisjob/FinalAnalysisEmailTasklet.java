@@ -14,7 +14,7 @@ public class FinalAnalysisEmailTasklet implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(FinalAnalysisEmailTasklet.class);
 
     @Override
-    public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+    public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) {
         sendMail();
         return RepeatStatus.FINISHED;
     }

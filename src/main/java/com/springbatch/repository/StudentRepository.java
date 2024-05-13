@@ -8,11 +8,8 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    // You can define additional query methods here if needed
-
-
-    @Query(value = "SELECT * FROM students WHERE percentage_of_marks < 80", nativeQuery = true)
-    List<Student> findAllStudentsWithPercentageLessThan80();
+    @Query(value = "SELECT * FROM students WHERE percentage_of_marks < 60", nativeQuery = true)
+    List<Student> findAllStudentsWithPercentageLessThan60();
 
 }
 
