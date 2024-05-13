@@ -60,10 +60,8 @@ public class AppLauncher implements CommandLineRunner {
 
 		try {
 			jobLauncher.run(jobToRun, jobParameters);
-			System.exit(0);
 		} catch (Exception e) {
 			LOGGER.error(String.format("Error Launching Job: %s Exception: %s", jobName, e.getMessage()), e);
-			System.exit(1);
 		}
 	}
 }

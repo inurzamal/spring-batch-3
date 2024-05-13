@@ -2,6 +2,7 @@ package com.springbatch.batch.studentemployeejob;
 
 import com.springbatch.entity.Employee;
 import com.springbatch.entity.Student;
+import com.springbatch.listener.JobCompletionListener;
 import com.springbatch.repository.EmployeeRepository;
 import com.springbatch.repository.StudentRepository;
 import org.springframework.batch.core.Job;
@@ -67,6 +68,7 @@ public class StudentEmployeeJobConfiguration {
         return new JobBuilder("studentEmployeeJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(studentEmployeeStep(jobRepository, transactionManager))
+                .listener(new JobCompletionListener())
                 .build();
     }
 

@@ -20,7 +20,7 @@ spring:
 
   batch:
     job:
-      names: studentemployeejob # studentemployeejob # purgeEscrowAnalysisJob # individualFinalAnalysisJob
+      names: studentEmployeeJob # studentEmployeeJob # purgeEscrowAnalysisJob # individualFinalAnalysisJob
       enabled: false
 
 logging:
